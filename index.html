@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TOPSWIM 游泳配速 Zone 换算器</title>
+<style>
+:root{--bg:#f6f8fc;--card:rgba(255,255,255,.94);--text:#142033;--muted:#627089;--line:#dbe3f0;--primary:#3157f6;--shadow:0 18px 45px rgba(28,47,91,.12);--z1:#fff;--z2:#fff1f6;--z3:#eaf3ff;--z4:#d8ddff;--z5:#c9befe}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",Arial,sans-serif;color:var(--text);background:radial-gradient(circle at top left,rgba(110,161,255,.18),transparent 32%),radial-gradient(circle at top right,rgba(203,162,255,.2),transparent 28%),var(--bg);position:relative;overflow-x:hidden}
+body:before{content:"TOPSWIM";position:fixed;left:50%;top:52%;transform:translate(-50%,-50%) rotate(-24deg);font-size:clamp(64px,12vw,170px);font-weight:900;letter-spacing:.18em;color:rgba(49,87,246,.055);white-space:nowrap;pointer-events:none;user-select:none;z-index:0}
+.page{position:relative;z-index:1;width:min(1180px,calc(100% - 32px));margin:0 auto;padding:28px 0 42px}
+.header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px}.brand{display:flex;align-items:center;gap:14px}.logo{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,#3157f6,#7b62ff);color:#fff;font-size:18px;font-weight:900;letter-spacing:.03em;box-shadow:0 12px 24px rgba(49,87,246,.24)}
+.brand-title{font-size:22px;font-weight:900;line-height:1.05;letter-spacing:.03em}.brand-subtitle{color:var(--muted);font-size:13px;margin-top:4px}.hero{margin-bottom:24px}.hero h1{margin:0 0 10px;font-size:clamp(28px,4vw,42px);line-height:1.12}.hero p{max-width:790px;margin:0;color:var(--muted);font-size:16px;line-height:1.8}
+.layout{display:grid;grid-template-columns:360px minmax(0,1fr);gap:22px;align-items:start}.card{background:var(--card);backdrop-filter:blur(10px);border:1px solid rgba(219,227,240,.85);border-radius:24px;box-shadow:var(--shadow)}.panel,.section{padding:22px}.panel h2,.section h2{margin:0 0 18px;font-size:22px}
+.field{margin-bottom:16px}.field label{display:block;margin-bottom:8px;font-size:14px;font-weight:700}select,input{width:100%;height:48px;border:1px solid var(--line);border-radius:14px;background:#fff;padding:0 14px;font-size:16px;color:var(--text);outline:none}select:focus,input:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(49,87,246,.12)}
+.hint{margin-top:18px;border-radius:18px;padding:15px 16px;background:#f3f6fb;color:var(--muted);font-size:14px;line-height:1.7}.content{display:grid;gap:18px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.stat{padding:18px;border-radius:20px;background:rgba(255,255,255,.82);border:1px solid var(--line)}.stat-label{color:var(--muted);font-size:14px;margin-bottom:8px}.stat-value{font-size:28px;font-weight:900}
+.zones{display:grid;gap:12px}.zone{display:grid;grid-template-columns:70px 160px 180px 1fr;gap:14px;align-items:center;border:1px solid rgba(219,227,240,.95);border-radius:20px;padding:16px 18px}.z1{background:var(--z1)}.z2{background:var(--z2)}.z3{background:var(--z3)}.z4{background:var(--z4)}.z5{background:var(--z5)}.zone-code{font-size:24px;font-weight:900}.zone-name{font-weight:700}.zone-pace{font-weight:900;font-size:18px}.zone-note,.event-note{color:#354258;line-height:1.6}.event-note{line-height:1.8}
+.warning{display:none;margin-top:16px;padding:14px 16px;border-radius:16px;background:#fff1f2;color:#be123c;font-size:14px;line-height:1.6}.footer{margin-top:22px;text-align:center;color:var(--muted);font-size:13px;line-height:1.7}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.zone{grid-template-columns:1fr;gap:8px}.header{align-items:flex-start;flex-direction:column}}
+</style></head>
+<body><main class="page">
+<header class="header"><div class="brand"><div class="logo">TS</div><div><div class="brand-title">TOPSWIM</div><div class="brand-subtitle">游泳配速训练工具</div></div></div></header>
+<section class="hero"><h1>游泳配速 Zone 换算器</h1><p>输入 200 米与 400 米自由泳最好成绩，估算基于 CSS（Critical Swim Speed）的 5 个训练配速区间。它可以帮助你把“统一成绩要求”转化为更适合个人能力的训练配速参考。</p></section>
+<section class="layout"><aside class="card panel"><h2>输入信息</h2>
+<div class="field"><label for="sex">性别</label><select id="sex"><option value="female">女</option><option value="male">男</option></select></div>
+<div class="field"><label for="eventType">主项距离</label><select id="eventType"><option value="short">短距离</option><option value="middle" selected>中距离</option><option value="long">长距离</option></select></div>
+<div class="field"><label for="time200">200 米自由泳最好成绩（秒）</label><input id="time200" type="number" min="1" step="0.01" value="120" /></div>
+<div class="field"><label for="time400">400 米自由泳最好成绩（秒）</label><input id="time400" type="number" min="1" step="0.01" value="260" /></div>
+<div class="hint">首版计算仅由 200 米和 400 米成绩决定。性别与主项距离用于页面解释，不直接改变配速公式，让实际成绩本身体现个体差异。</div><div id="warning" class="warning"></div></aside>
+<div class="content"><section class="card section"><h2>计算结果</h2><div class="stats"><div class="stat"><div class="stat-label">200 米平均配速</div><div class="stat-value" id="pace200">--</div></div><div class="stat"><div class="stat-label">400 米平均配速</div><div class="stat-value" id="pace400">--</div></div><div class="stat"><div class="stat-label">CSS 阈值配速</div><div class="stat-value" id="css">--</div></div></div></section>
+<section class="card section"><h2>5 个训练 Zone（每 100 米配速）</h2><div class="zones" id="zones"></div></section>
+<section class="card section"><h2>主项提示</h2><div class="event-note" id="eventNote"></div></section></div></section>
+<footer class="footer">TOPSWIM · 本工具输出的是基于成绩估算的“配速 Zone”，不等同于真实心率 Zone。<br/>实际训练中建议结合心率、RPE 与技术状态校准。</footer>
+</main>
+<script>
+const eventTypeInput=document.getElementById("eventType"),time200Input=document.getElementById("time200"),time400Input=document.getElementById("time400"),pace200El=document.getElementById("pace200"),pace400El=document.getElementById("pace400"),cssEl=document.getElementById("css"),zonesEl=document.getElementById("zones"),warningEl=document.getElementById("warning"),eventNoteEl=document.getElementById("eventNote");
+function formatPace(seconds){if(!Number.isFinite(seconds)||seconds<=0)return"--";const r=Math.round(seconds),m=Math.floor(r/60),s=r%60;return `${m}:${String(s).padStart(2,"0")}`}
+function eventHint(type){return{short:"短距离主项：更关注 Z4–Z5 的训练质量；Z1–Z2 主要用于恢复、技术与训练间衔接。",middle:"中距离主项：Z2 用于打基础，Z3–Z4 往往是专项能力核心，Z5 用于保留速度刺激。",long:"长距离主项：Z2–Z4 是主要训练区间，Z5 通常作为少量速度补充。"}[type]}
+function updateCalculator(){const t200=Number(time200Input.value),t400=Number(time400Input.value);warningEl.style.display="none";warningEl.textContent="";if(!t200||!t400||t200<=0||t400<=0){pace200El.textContent="--";pace400El.textContent="--";cssEl.textContent="--";zonesEl.innerHTML="";eventNoteEl.textContent=eventHint(eventTypeInput.value);return}
+const avg200=t200/2,avg400=t400/4,css=(t400-t200)/2;if(avg200>=avg400){warningEl.textContent="200 米平均配速应快于 400 米平均配速，请检查输入成绩。";warningEl.style.display="block"}pace200El.textContent=`${formatPace(avg200)} /100m`;pace400El.textContent=`${formatPace(avg400)} /100m`;cssEl.textContent=`${formatPace(css)} /100m`;
+const zones=[{code:"Z1",name:"恢复 / 技术",pace:`${formatPace(css+12)}–${formatPace(css+20)} /100m`,note:"热身、放松、低强度技术练习",cls:"z1"},{code:"Z2",name:"轻松有氧",pace:`${formatPace(css+6)}–${formatPace(css+12)} /100m`,note:"有氧基础、长距离稳定游",cls:"z2"},{code:"Z3",name:"节奏 / 稳态",pace:`${formatPace(css+2)}–${formatPace(css+6)} /100m`,note:"节奏训练，较强但仍可维持",cls:"z3"},{code:"Z4",name:"阈值",pace:`${formatPace(css-2)}–${formatPace(css+2)} /100m`,note:"接近 CSS，提升阈值能力",cls:"z4"},{code:"Z5",name:"高强度 / 速度",pace:`${formatPace(avg200)}–${formatPace(Math.max(avg200,css-3))} /100m`,note:"短距离高强度刺激；实际训练需结合速度、动作与主观感受判断",cls:"z5"}];
+zonesEl.innerHTML=zones.map(z=>`<div class="zone ${z.cls}"><div class="zone-code">${z.code}</div><div class="zone-name">${z.name}</div><div class="zone-pace">${z.pace}</div><div class="zone-note">${z.note}</div></div>`).join("");eventNoteEl.textContent=eventHint(eventTypeInput.value)}
+[eventTypeInput,time200Input,time400Input].forEach(el=>{el.addEventListener("input",updateCalculator);el.addEventListener("change",updateCalculator)});updateCalculator();
+</script></body></html>
