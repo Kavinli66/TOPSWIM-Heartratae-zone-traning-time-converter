@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOPSWIM 五大训练配速区间换算</title>
+<style>
+body { font-family: Arial, sans-serif; background:#f5f5f5; margin:0; padding:0; }
+.container { max-width: 600px; margin: 50px auto; padding:20px; background:#fff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+h1 { text-align:center; }
+input[type="number"], select { width:100%; padding:8px; margin:5px 0 15px 0; box-sizing:border-box; }
+button { width:100%; padding:10px; background:#ff4d4f; color:white; border:none; border-radius:5px; font-size:16px; cursor:pointer; }
+button:hover { background:#ff7875; }
+.note { font-size:12px; color:#888; margin-top:5px; }
+.modal { display:none; position: fixed; z-index: 1000; left:0; top:0; width:100%; height:100%; background: rgba(0,0,0,0.5); }
+.modal-content { background:#fff; padding:20px; border-radius:6px; width:300px; margin:150px auto; text-align:center; }
+.zone-display { margin-top:20px; padding:15px; background:#f0f5ff; border-radius:6px; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>TOPSWIM 五大训练配速区间换算</h1>
+
+<label>性别</label>
+<select id="sex">
+<option value="男">男</option>
+<option value="女">女</option>
+</select>
+
+<label>主项距离（短/中/长）</label>
+<select id="eventType">
+<option value="短距离(50/100米)">短距离(50/100米)</option>
+<option value="中距离(200/400米)">中距离(200/400米)</option>
+<option value="长距离(800/1500米)">长距离(800/1500米)</option>
+</select>
+
+<label>50 米最好成绩（秒.毫秒）</label>
+<input type="number" id="time50" placeholder="例如 25.0" step="0.1" min="0">
+
+<label>200 米最好成绩（秒.毫秒）</label>
+<input type="number" id="time200" placeholder="例如 130.5" step="0.1" min="0">
+
+<label>400 米最好成绩（秒.毫秒）</label>
+<input type="number" id="time400" placeholder="例如 280.2" step="0.1" min="0">
+
+<button id="submitBtn">确认成绩并计算</button>
+
+<div class="note">使用须知：您的成绩数据将被自动记录用于计算软件更新</div>
+
+<div class="zone-display" id="zoneDisplay"></div>
+</div>
+
+<div class="modal" id="errorModal">
+<div class="modal-content" id="errorText"></div>
+</div>
+
+<script>
+const API_URL = "https://shiny-wave-2c1b.kavinli070606.workers.dev";
+
+function showError(msg){
+  const modal = document.getElementById('errorModal');
+  const text = document.getElementById('errorText');
+  text.textContent = msg;
+  modal.style.display = 'block';
+  setTimeout(()=>{ modal.style.display='none'; },3000);
+}
+
+function calculateCSS(sex,eventType,t50,t200,t400){
+  let css50,css200;
+  if(eventType.startsWith('短距离')){
+    css50 = t50; css200 = Math.min(t200,t400);
+  } else if(eventType.startsWith('中距离')){
+    css50 = t50; css200 = (t200+t400)/2;
+  } else {
+    css50 = t50; css200 = t200+t400; // 长距离可以自定义
+  }
+  return {css50, css200};
+}
+
+function computeZones(css50,css200){
+  // 简化示例区间
+  return {
+    "Zone1":"轻松区 50-60%",
+    "Zone2":"有氧区 60-70%",
+    "Zone3":"节奏区 70-80%",
+    "Zone4":"阈值区 80-90%",
+    "Zone5":"冲刺区 90-100%"
+  };
+}
+
+document.getElementById('submitBtn').addEventListener('click',()=>{
+  const sex = document.getElementById('sex').value;
+  const eventType = document.getElementById('eventType').value;
+  const t50 = parseFloat(document.getElementById('time50').value);
+  const t200 = parseFloat(document.getElementById('time200').value);
+  const t400 = parseFloat(document.getElementById('time400').value);
+
+  if(isNaN(t50)||isNaN(t200)||isNaN(t400)||t50<=0||t200<=0||t400<=0){
+    showError("请正确填写所有成绩！");
+    return;
+  }
+
+  const css = calculateCSS(sex,eventType,t50,t200,t400);
+  const zones = computeZones(css.css50,css.css200);
+  document.getElementById('zoneDisplay').innerHTML = `
+    <strong>五大训练配速区间 (上中下区间)</strong><br>
+    Zone1: ${zones.Zone1}<br>
+    Zone2: ${zones.Zone2}<br>
+    Zone3: ${zones.Zone3}<br>
+    Zone4: ${zones.Zone4}<br>
+    Zone5: ${zones.Zone5}
+  `;
+
+  // POST 数据到 Worker
+  fetch(API_URL,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({sex,eventType,time50:t50,time200:t200,time400:t400})
+  }).then(res=>res.json())
+  .then(data=>{
+    if(data.status==="error") showError("提交数据失败，请稍后重试");
+  }).catch(e=>showError("提交数据失败，请检查网络"));
+});
+</script>
+</body>
+</html>
