@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TOPSWIM 游泳训练配速区间换算软件 V1.0</title>
+<style>
+:root{--bg:#f6f8fc;--card:rgba(255,255,255,.94);--text:#142033;--muted:#627089;--line:#dbe3f0;--primary:#3157f6;--shadow:0 18px 45px rgba(28,47,91,.12);--z1:#fff;--z2:#fff1f6;--z3:#eaf3ff;--z4:#d8ddff;--z5:#c9befe}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",Arial,sans-serif;color:var(--text);background:radial-gradient(circle at top left,rgba(110,161,255,.18),transparent 32%),radial-gradient(circle at top right,rgba(203,162,255,.2),transparent 28%),var(--bg);position:relative;overflow-x:hidden}
+.watermark-layer{position:fixed;inset:0;pointer-events:none;user-select:none;z-index:0;overflow:hidden}.watermark{position:absolute;font-weight:900;letter-spacing:.18em;color:rgba(49,87,246,.10);white-space:nowrap}.w1{left:-3%;top:10%;font-size:84px;transform:rotate(-24deg)}.w2{left:28%;top:30%;font-size:130px;transform:rotate(-24deg)}.w3{right:-2%;top:16%;font-size:78px;transform:rotate(-24deg)}.w4{left:2%;bottom:14%;font-size:92px;transform:rotate(-24deg)}.w5{right:5%;bottom:10%;font-size:108px;transform:rotate(-24deg)}
+.page{position:relative;z-index:1;width:min(1220px,calc(100% - 32px));margin:0 auto;padding:28px 0 42px}.header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px}.brand{display:flex;align-items:center;gap:14px}.logo{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,#3157f6,#7b62ff);color:#fff;font-size:18px;font-weight:900;letter-spacing:.03em;box-shadow:0 12px 24px rgba(49,87,246,.24)}.brand-title{font-size:22px;font-weight:900;line-height:1.05;letter-spacing:.03em}.brand-subtitle{color:var(--muted);font-size:13px;margin-top:4px}.meta-group{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}.badge{padding:10px 14px;border:1px solid rgba(219,227,240,.9);border-radius:999px;background:rgba(255,255,255,.72);color:#334155;font-size:14px;font-weight:700;box-shadow:0 10px 26px rgba(28,47,91,.08)}.badge span{color:var(--primary);font-weight:900}
+.hero{margin-bottom:24px}.hero h1{margin:0 0 10px;font-size:clamp(28px,4vw,42px);line-height:1.12}.hero p{max-width:900px;margin:0;color:var(--muted);font-size:16px;line-height:1.8}.hero .zone-tip{display:inline-flex;margin-top:14px;padding:10px 14px;border-radius:999px;background:rgba(49,87,246,.1);color:#1d4ed8;font-weight:800}
+.layout{display:grid;grid-template-columns:400px minmax(0,1fr);gap:22px;align-items:start}.card{background:var(--card);backdrop-filter:blur(10px);border:1px solid rgba(219,227,240,.85);border-radius:24px;box-shadow:var(--shadow)}.panel,.section{padding:22px}.panel h2,.section h2{margin:0 0 18px;font-size:22px}.field{margin-bottom:16px}.field label{display:block;margin-bottom:8px;font-size:14px;font-weight:800}
+select{width:100%;height:48px;border:1px solid var(--line);border-radius:14px;background:#fff;padding:0 14px;font-size:16px;color:var(--text);outline:none}select:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(49,87,246,.12)}
+.time-converter-box{border-radius:16px;overflow:hidden;border:1px solid rgba(0,0,0,.12);background:#2f2f2f;box-shadow:0 10px 24px rgba(0,0,0,.08)}.time-title{display:grid;grid-template-columns:1fr 1.55fr;border-bottom:1px solid rgba(255,255,255,.10)}.time-event{padding:13px 15px;color:#fff;font-size:18px;font-weight:800;border-right:1px solid rgba(255,255,255,.12)}.time-format{padding:13px 15px;color:#fff;font-size:18px;font-weight:800;letter-spacing:.08em}.time-row{display:grid;grid-template-columns:1fr 1.55fr;align-items:center}.time-row+.time-row{border-top:1px solid rgba(255,255,255,.10)}.time-label{padding:14px 15px;color:#fff;font-size:17px;font-weight:800;border-right:1px solid rgba(255,255,255,.12)}.time-fields{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:7px;padding:10px 12px}.time-fields input{width:100%;height:42px;border:0;border-radius:10px;background:#444;color:#fff;text-align:center;font-size:18px;font-weight:800;outline:none}.time-fields input:focus{box-shadow:0 0 0 3px rgba(255,255,255,.18);background:#4d4d4d}.separator{color:#fff;font-size:22px;font-weight:900}.time-help{margin-top:8px;color:var(--muted);font-size:12px;line-height:1.5}.confirm-row{margin-top:14px;display:flex;justify-content:flex-end}.confirm-button{border:0;border-radius:14px;padding:12px 18px;background:#3157f6;color:#fff;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 10px 22px rgba(49,87,246,.22)}.confirm-button:hover{background:#2447d8}.confirm-button:active{transform:translateY(1px)}.confirm-row{margin-top:14px;display:flex;justify-content:flex-end}.confirm-button{border:0;border-radius:14px;padding:12px 18px;background:#3157f6;color:#fff;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 10px 22px rgba(49,87,246,.22)}.confirm-button:hover{background:#2447d8}.confirm-button:active{transform:translateY(1px)}
+.hint{margin-top:18px;border-radius:18px;padding:15px 16px;background:#f3f6fb;color:var(--muted);font-size:14px;line-height:1.7}.content{display:grid;gap:18px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.stat{padding:18px;border-radius:20px;background:rgba(255,255,255,.82);border:1px solid var(--line)}.stat-label{color:var(--muted);font-size:14px;margin-bottom:8px}.stat-value{font-size:28px;font-weight:900}.section-note{margin-top:-8px;margin-bottom:18px;color:var(--muted);font-size:14px;line-height:1.7}
+.zones{display:grid;gap:12px}.zone{display:grid;grid-template-columns:66px 128px 142px 1.35fr 1fr;gap:14px;align-items:center;border:1px solid rgba(219,227,240,.95);border-radius:20px;padding:16px 18px}.z1{background:var(--z1)}.z2{background:var(--z2)}.z3{background:var(--z3)}.z4{background:var(--z4)}.z5{background:var(--z5)}.zone-code{font-size:24px;font-weight:900}.zone-name{font-weight:800}.zone-hr{font-weight:800;color:#374151}.zone-note,.event-note,.formula-text,.disclaimer-text{color:#354258;line-height:1.75}.subpaces{display:grid;gap:7px}.subpace{display:grid;grid-template-columns:42px 1fr;gap:8px;align-items:center;padding:7px 9px;border-radius:12px;background:rgba(255,255,255,.58);border:1px solid rgba(255,255,255,.8)}.subpace-label{display:inline-flex;align-items:center;justify-content:center;min-width:34px;padding:2px 6px;border-radius:999px;background:rgba(49,87,246,.1);color:#1d4ed8;font-size:12px;font-weight:900}.subpace-value{font-weight:900;font-size:16px;white-space:nowrap}
+.formula-box{display:grid;gap:12px}.formula-line{padding:14px 16px;border-radius:16px;background:#f8fafc;border:1px solid var(--line)}.formula-code{margin-top:6px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:15px;font-weight:800;color:#1d4ed8}.warning{display:none;margin-top:16px;padding:14px 16px;border-radius:16px;background:#fff1f2;color:#be123c;font-size:14px;line-height:1.6}.footer{margin-top:22px;text-align:center;color:var(--muted);font-size:13px;line-height:1.7}.error-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:9999;background:rgba(15,23,42,.38);backdrop-filter:blur(4px);padding:18px}.error-box{width:min(460px,100%);border-radius:24px;background:#fff;border:1px solid rgba(244,63,94,.25);box-shadow:0 28px 80px rgba(15,23,42,.28);overflow:hidden;animation:popIn .18s ease-out}@keyframes popIn{from{transform:translateY(10px) scale(.98);opacity:.2}to{transform:translateY(0) scale(1);opacity:1}}.error-head{display:flex;align-items:center;gap:12px;padding:18px 20px;background:#fff1f2;color:#be123c;font-size:20px;font-weight:900}.error-icon{width:32px;height:32px;border-radius:999px;display:grid;place-items:center;background:#e11d48;color:#fff;font-weight:900}.error-body{padding:18px 20px 6px;color:#334155;font-size:16px;line-height:1.75}.error-actions{display:flex;justify-content:flex-end;padding:14px 20px 20px}.error-button{border:0;border-radius:14px;padding:11px 18px;background:#3157f6;color:#fff;font-size:15px;font-weight:900;cursor:pointer}.error-button:hover{background:#2447d8}
+
+.results-locked .stat-value,.results-locked .zones,.results-locked .event-note{filter:blur(5px);opacity:.48;user-select:none;transition:filter .18s ease,opacity .18s ease}.results-locked .section-note::after{content:" 请确认成绩后查看正式结果。";color:#1d4ed8;font-weight:800}.survey-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:9998;background:rgba(15,23,42,.28);backdrop-filter:blur(3px);padding:18px}.survey-box{width:min(460px,100%);border-radius:24px;background:#fff;border:1px solid rgba(49,87,246,.18);box-shadow:0 28px 80px rgba(15,23,42,.24);overflow:hidden;animation:popIn .18s ease-out}.survey-head{padding:18px 20px;background:linear-gradient(135deg,rgba(49,87,246,.12),rgba(123,98,255,.12));color:#1d4ed8;font-size:20px;font-weight:900}.survey-body{padding:18px 20px 6px;color:#334155;font-size:16px;line-height:1.75}.survey-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;padding:14px 20px 20px}.survey-link,.survey-close{border:0;border-radius:14px;padding:11px 16px;font-size:15px;font-weight:900;cursor:pointer;text-decoration:none}.survey-link{background:#3157f6;color:#fff;box-shadow:0 10px 22px rgba(49,87,246,.22)}.survey-link:hover{background:#2447d8}.survey-close{background:#eef2ff;color:#334155}.survey-close:hover{background:#e0e7ff}
+@media(max-width:1080px){.layout{grid-template-columns:1fr}}@media(max-width:860px){.stats{grid-template-columns:1fr}.zone{grid-template-columns:1fr;gap:10px}.header{align-items:flex-start;flex-direction:column}.meta-group{justify-content:flex-start}}@media(max-width:560px){.time-title,.time-row{grid-template-columns:1fr}.time-event,.time-label{border-right:0;border-bottom:1px solid rgba(255,255,255,.10)}.watermark{font-size:56px!important}.badge{font-size:13px}}
+</style>
+</head>
+<body>
+<div id="errorModal" class="error-modal" role="alertdialog" aria-modal="true" aria-labelledby="errorTitle"><div class="error-box"><div class="error-head"><div class="error-icon">!</div><div id="errorTitle">输入错误</div></div><div class="error-body" id="errorMessage">请检查输入内容。</div><div class="error-actions"><button class="error-button" id="errorClose" type="button">我知道了</button></div></div></div>
+<div id="surveyModal" class="survey-modal" role="dialog" aria-modal="true" aria-labelledby="surveyTitle"><div class="survey-box"><div class="survey-head" id="surveyTitle">使用体验反馈</div><div class="survey-body">邀请您花半分钟填写一下问卷记录成绩，这对软件更新帮助很大！请助力游泳科学训练发展！</div><div class="survey-actions"><button class="survey-close" id="surveyClose" type="button">稍后再说</button><a class="survey-link" href="https://v.wjx.cn/vm/Qs31GpG.aspx" target="_blank" rel="noopener noreferrer">填写问卷</a></div></div></div>
+<div class="watermark-layer" aria-hidden="true"><div class="watermark w1">TOPSWIM</div><div class="watermark w2">TOPSWIM</div><div class="watermark w3">TOPSWIM</div><div class="watermark w4">TOPSWIM</div><div class="watermark w5">TOPSWIM</div></div>
+<main class="page">
+<header class="header">
+  <div class="brand"><div class="logo">TS</div><div><div class="brand-title">TOPSWIM</div><div class="brand-subtitle">游泳训练配速区间换算软件</div></div></div>
+  <div class="meta-group"><div class="badge">作者：<span>Kavin Li</span></div><div class="badge">版本：<span>1.0</span></div></div>
+</header>
+<section class="hero">
+  <h1>TOPSWIM 游泳训练配速区间换算软件 V1.0</h1>
+  <p>输入 50 米、200 米与 400 米自由泳最好成绩，系统会分别参考 50/400 与 200/400 两种 CSS（Critical Swim Speed，临界游速/阈值配速）测试思路，并根据主项距离生成游泳训练中常用的五大训练配速区间。每个配速区间进一步分为上 / 中 / 下三个小区间，其中“上”代表该区间内更快、更接近高强度的一端。</p>
+  <div class="zone-tip">配速区间（Zone）= 用每 100 米配速表达训练强度的分区参考</div>
+</section>
+<section class="layout">
+<aside class="card panel">
+  <h2>输入信息</h2>
+  <div class="field"><label for="sex">性别</label><select id="sex"><option value="female">女</option><option value="male">男</option></select></div>
+  <div class="field"><label for="eventType">主项距离</label><select id="eventType"><option value="short">短距离（50/100 米）</option><option value="middle" selected>中距离（200/400 米）</option><option value="long">长距离（800/1500 米）</option></select></div>
+  <div class="field">
+    <label>比赛最好成绩输入</label>
+    <div class="time-converter-box">
+      <div class="time-title"><div class="time-event">项目</div><div class="time-format">MM ： SS . HH</div></div>
+      <div class="time-row"><div class="time-label">50 米自由泳</div><div class="time-fields"><input id="m50" type="number" min="0" step="1" value="0" /><span class="separator">:</span><input id="s50" type="number" min="0" max="59" step="1" value="27" /><span class="separator">.</span><input id="d50" type="number" min="0" max="99" step="1" value="00" /></div></div>
+      <div class="time-row"><div class="time-label">200 米自由泳</div><div class="time-fields"><input id="m200" type="number" min="0" step="1" value="2" /><span class="separator">:</span><input id="s200" type="number" min="0" max="59" step="1" value="00" /><span class="separator">.</span><input id="d200" type="number" min="0" max="99" step="1" value="00" /></div></div>
+      <div class="time-row"><div class="time-label">400 米自由泳</div><div class="time-fields"><input id="m400" type="number" min="0" step="1" value="4" /><span class="separator">:</span><input id="s400" type="number" min="0" max="59" step="1" value="20" /><span class="separator">.</span><input id="d400" type="number" min="0" max="99" step="1" value="00" /></div></div>
+    </div>
+    <div class="time-help">格式说明：MM = 分钟，SS = 秒，HH = 百分秒。例如 2:03.45 表示 2 分 03 秒 45，即 2:03.45。</div><div class="confirm-row"><button id="confirmScores" class="confirm-button" type="button">确认成绩并计算</button></div>
+  </div>
+  <div class="hint">成绩使用专业比赛格式输入。性别用于页面记录；主项距离用于选择 CSS 计算方式与分区配速。</div>
+  <div id="warning" class="warning"></div>
+</aside>
+<div class="content results-locked" id="resultsContent">
+<section class="card section"><h2>计算结果</h2><div class="stats"><div class="stat"><div class="stat-label">50 米折算配速</div><div class="stat-value" id="pace50">--</div></div><div class="stat"><div class="stat-label">200 米平均配速</div><div class="stat-value" id="pace200">--</div></div><div class="stat"><div class="stat-label">400 米平均配速</div><div class="stat-value" id="pace400">--</div></div><div class="stat"><div class="stat-label">本次采用 CSS</div><div class="stat-value" id="css">--</div></div></div></section>
+<section class="card section"><h2>游泳五大训练配速区间</h2><div class="section-note">最大心率百分比用于与心率训练区间概念对照；页面输出的配速区间基于 CSS 速度百分比换算，而不是简单固定加减秒数。每个区间内：上 = 更快，中 = 中段，下 = 更慢。</div><div class="zones" id="zones"></div></section>
+<section class="card section"><h2>主项提示</h2><div class="event-note" id="eventNote"></div></section>
+<section class="card section"><h2>计算说明</h2><div class="formula-box"><div class="formula-line"><div class="formula-text">本软件要求输入 50 米、200 米与 400 米成绩。短距离主项采用 50/400 CSS，更强调通过 50 米极限冲刺剥离无氧速度贡献；长距离主项采用 200/400 CSS，更接近长距离巡航配速；中距离主项取两种 CSS 的平均。</div><div class="formula-code">50/400 CSS 配速 = (400m 成绩 - 50m 成绩) / 3.5</div><div class="formula-code">200/400 CSS 配速 = (400m 成绩 - 200m 成绩) / 2</div></div><div class="formula-line"><div class="formula-text">配速区间按 CSS 速度百分比换算：一区约 65–75%，二区约 75–85%，三区约 85–92%，四区约 92–100%，五区约 100–108%。该结果适合作为训练参考，实际训练仍需结合心率、主观用力感、技术状态和恢复情况进行校准。</div></div></div></section>
+<section class="card section"><h2>免责声明 / 使用范围</h2><div class="disclaimer-text">本工具用于游泳训练配速参考，不构成医学建议、诊断意见或正式运动处方。实际训练应结合教练指导、个人身体状态、心率监测、主观用力感、技术表现和恢复情况进行调整。</div></section>
+</div></section>
+<footer class="footer">TOPSWIM 游泳训练配速区间换算软件 V1.0 · 作者：Kavin Li<br/>本工具输出的是基于成绩估算的训练配速区间，不等同于真实心率区间。</footer>
+</main>
+<script>
+const eventTypeInput=document.getElementById("eventType");
+const inputIds=["m50","s50","d50","m200","s200","d200","m400","s400","d400"];
+const inputs=inputIds.map(id=>document.getElementById(id));
+const pace50El=document.getElementById("pace50"),pace200El=document.getElementById("pace200"),pace400El=document.getElementById("pace400"),cssEl=document.getElementById("css"),zonesEl=document.getElementById("zones"),warningEl=document.getElementById("warning"),eventNoteEl=document.getElementById("eventNote"),resultsContent=document.getElementById("resultsContent"),errorModal=document.getElementById("errorModal"),errorMessage=document.getElementById("errorMessage"),errorClose=document.getElementById("errorClose"),surveyModal=document.getElementById("surveyModal"),surveyClose=document.getElementById("surveyClose");
+let lastErrorText="";
+function showError(message){if(message===lastErrorText&&errorModal.style.display==="flex")return;lastErrorText=message;errorMessage.textContent=message;errorModal.style.display="flex"}
+function hideError(){errorModal.style.display="none";lastErrorText=""}
+errorClose.addEventListener("click",hideError);errorModal.addEventListener("click",e=>{if(e.target===errorModal)hideError()});document.addEventListener("keydown",e=>{if(e.key==="Escape"){hideError();hideSurvey()}});
+let surveyTimer=null;
+function showSurvey(){surveyModal.style.display="flex"}
+function hideSurvey(){surveyModal.style.display="none"}
+surveyClose.addEventListener("click",hideSurvey);surveyModal.addEventListener("click",e=>{if(e.target===surveyModal)hideSurvey()});
+function clampInput(el,max){if(el.value==="")return;let v=Number(el.value);if(v<0)v=0;if(max!==null&&v>max){showError(max===59?"秒数不能超过 59，请检查成绩输入。":"百分秒不能超过 99，请检查成绩输入。");v=max}el.value=String(v).padStart(max===99||max===59?2:1,"0")}
+function toTotalSeconds(minId,secId,decId){const m=Number(document.getElementById(minId).value||0);const s=Number(document.getElementById(secId).value||0);const dRaw=String(document.getElementById(decId).value||"0").padStart(2,"0").slice(0,2);return m*60+s+Number(dRaw)/100}
+function formatPace(seconds){if(!Number.isFinite(seconds)||seconds<=0)return"--";const rounded=Math.round(seconds*10)/10;const minutes=Math.floor(rounded/60);const secs=(rounded%60).toFixed(1).padStart(4,"0");return `${minutes}:${secs}`}
+function eventHint(type){return{short:"短距离主项（50/100 米）：采用 50/400 CSS。这个方法用 400 米表现代表持续能力，同时用 50 米极限速度剥离冲刺贡献，因此比单纯 200/400 更适合速度型运动员判断有氧可持续配速。",middle:"中距离主项（200/400 米）：采用 50/400 CSS 与 200/400 CSS 的平均值。这样既保留 200/400 对专项巡航配速的判断，也参考 50 米速度对无氧能力的剥离。",long:"长距离主项（800/1500 米）：采用 200/400 CSS。这个方法更接近长距离训练中的巡航配速和阈值配速，适合用于有氧基础、节奏和阈值训练。"}[type]}
+function splitZone(fast,slow){const min=Math.min(fast,slow),max=Math.max(fast,slow),step=(max-min)/3;return[{label:"上",from:min,to:min+step},{label:"中",from:min+step,to:min+2*step},{label:"下",from:min+2*step,to:max}]}
+function renderSubpaces(parts){return `<div class="subpaces">${parts.map(p=>`<div class="subpace"><div class="subpace-label">${p.label}</div><div class="subpace-value">${formatPace(p.from)}–${formatPace(p.to)} /100m</div></div>`).join("")}</div>`}
+function zoneFromCssPercent(cssPace,fastPct,slowPct){return{fast:cssPace/fastPct,slow:cssPace/slowPct}}
+function renderPlaceholder(){
+  pace50El.textContent="-- /100m";pace200El.textContent="-- /100m";pace400El.textContent="-- /100m";cssEl.textContent="-- /100m";
+  const placeholderZones=[
+    {code:"一区",name:"恢复 / 技术",hr:"50–60% 最大心率",cls:"z1",note:"确认成绩后显示配速区间"},
+    {code:"二区",name:"轻松有氧",hr:"60–70% 最大心率",cls:"z2",note:"确认成绩后显示配速区间"},
+    {code:"三区",name:"节奏 / 稳态",hr:"70–80% 最大心率",cls:"z3",note:"确认成绩后显示配速区间"},
+    {code:"四区",name:"阈值",hr:"80–90% 最大心率",cls:"z4",note:"确认成绩后显示配速区间"},
+    {code:"五区",name:"高强度 / 速度",hr:"90–100% 最大心率",cls:"z5",note:"确认成绩后显示配速区间"}
+  ];
+  zonesEl.innerHTML=placeholderZones.map(z=>`<div class="zone ${z.cls}"><div class="zone-code">${z.code}</div><div class="zone-name">${z.name}</div><div class="zone-hr">${z.hr}</div><div class="subpaces"><div class="subpace"><div class="subpace-label">上</div><div class="subpace-value">-- /100m</div></div><div class="subpace"><div class="subpace-label">中</div><div class="subpace-value">-- /100m</div></div><div class="subpace"><div class="subpace-label">下</div><div class="subpace-value">-- /100m</div></div></div><div class="zone-note">${z.note}</div></div>`).join("");
+  eventNoteEl.textContent="请先输入成绩，并点击“确认成绩并计算”。";
+}
+function lockResults(){resultsContent.classList.add("results-locked")}
+function unlockResults(){resultsContent.classList.remove("results-locked")}
+function scheduleSurvey(){if(surveyTimer)clearTimeout(surveyTimer);surveyTimer=setTimeout(showSurvey,10000)}
+function updateCalculator(validate=false){
+  ["s50","s200","s400"].forEach(id=>clampInput(document.getElementById(id),59));["d50","d200","d400"].forEach(id=>clampInput(document.getElementById(id),99));
+  const t50=toTotalSeconds("m50","s50","d50"),t200=toTotalSeconds("m200","s200","d200"),t400=toTotalSeconds("m400","s400","d400");
+  warningEl.style.display="none";warningEl.textContent="";
+  if(!t50||!t200||!t400||t50<=0||t200<=0||t400<=0){renderPlaceholder();lockResults();if(validate)showError("请完整输入 50 米、200 米和 400 米自由泳最好成绩。");return false}
+  const avg50=t50*2,avg200=t200/2,avg400=t400/4;
+  const css200400=(t400-t200)/2;
+  const css50400=(t400-t50)/3.5;
+  const type=eventTypeInput.value;
+  let css=css200400,methodText="200/400 CSS";
+  if(type==="short"){css=css50400;methodText="50/400 CSS"}
+  else if(type==="middle"){css=(css50400+css200400)/2;methodText="50/400 与 200/400 平均 CSS"}
+  else{css=css200400;methodText="200/400 CSS"}
+  const warnings=[];
+  if(avg50>=avg200)warnings.push("50 米折算配速通常应快于 200 米平均配速，请检查 50 米或 200 米成绩输入。");
+  if(avg200>=avg400)warnings.push("200 米平均配速通常应快于 400 米平均配速，请检查 200 米或 400 米成绩输入。");
+  if(css<=0||!Number.isFinite(css)){warnings.push("当前成绩无法计算有效 CSS，请检查输入。")}
+  const diff=Math.abs(css50400-css200400);
+  if(diff>8)warnings.push(`两种 CSS 相差 ${formatPace(diff).replace(/^0:/,"")} /100m 以上，说明 50 米冲刺能力和 200/400 巡航能力差异很大；建议同时参考两种结果，不要只看单一数值。`);
+  if(warnings.length){warningEl.innerHTML=warnings.join("<br>");warningEl.style.display="block";if(validate)showError(warnings[0])}
+  pace50El.textContent=`${formatPace(avg50)} /100m`;pace200El.textContent=`${formatPace(avg200)} /100m`;pace400El.textContent=`${formatPace(avg400)} /100m`;cssEl.textContent=`${formatPace(css)} /100m`;
+  const z1=zoneFromCssPercent(css,0.75,0.65),z2=zoneFromCssPercent(css,0.85,0.75),z3=zoneFromCssPercent(css,0.92,0.85),z4=zoneFromCssPercent(css,1.00,0.92);
+  const zone5Fast=avg50+4;
+  const zone5Slow=Math.max(css,zone5Fast+6);
+  const z5={fast:zone5Fast,slow:zone5Slow};
+  const zones=[
+    {code:"一区",name:"恢复 / 技术",hr:"50–60% 最大心率",...z1,note:"热身、放松、低强度技术练习",cls:"z1"},
+    {code:"二区",name:"轻松有氧",hr:"60–70% 最大心率",...z2,note:"有氧基础、长距离稳定游",cls:"z2"},
+    {code:"三区",name:"节奏 / 稳态",hr:"70–80% 最大心率",...z3,note:"节奏训练，较强但仍可维持",cls:"z3"},
+    {code:"四区",name:"阈值",hr:"80–90% 最大心率",...z4,note:"接近 CSS，提升阈值能力",cls:"z4"},
+    {code:"五区",name:"高强度 / 速度",hr:"90–100% 最大心率",...z5,note:"用于短组高强度速度训练，重点关注出发后的动作质量、划频和爆发力；建议组间充分休息，避免动作变形。",cls:"z5"}
+  ];
+  zonesEl.innerHTML=zones.map(z=>`<div class="zone ${z.cls}"><div class="zone-code">${z.code}</div><div class="zone-name">${z.name}</div><div class="zone-hr">${z.hr}</div>${renderSubpaces(splitZone(z.fast,z.slow))}<div class="zone-note">${z.note}</div></div>`).join("");
+  eventNoteEl.textContent=`当前采用：${methodText}。`+eventHint(type);unlockResults();return true
+}
+[...inputs,eventTypeInput].forEach(el=>{el.addEventListener("input",()=>{renderPlaceholder();lockResults()});el.addEventListener("change",()=>{renderPlaceholder();lockResults()})});
+document.getElementById("confirmScores").addEventListener("click",()=>{if(updateCalculator(true))scheduleSurvey()});renderPlaceholder();lockResults();
+</script>
+</body>
+</html>
